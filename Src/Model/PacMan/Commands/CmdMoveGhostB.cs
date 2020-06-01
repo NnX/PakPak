@@ -52,10 +52,11 @@ namespace Game.Model
                 return _direction;
             }
 
-            private void ChangeDirection ()
+            public void ChangeDirection ()
             {
                 
                 int newDirection = UnityEngine.Random.Range(0, 4);
+                Debug.Log("New direction = " + newDirection);
                 switch(newDirection)
                 {
                     case 0:

@@ -1,5 +1,5 @@
 using Game.Misc;
-
+using UnityEngine;
 namespace Game.Model
 {
     public interface IModelPacMan
@@ -21,7 +21,10 @@ namespace Game.Model
     {
 
         eDirection _eDirectionGhostA;
-        eDirection _eDirectionGhostB;
+        eDirection _eDirectionGhostB_last;
+        eDirection _eDirectionGhostB_current;
+        int direction_counter = 0;
+        int DIRECTION_MAX = 7;
 
         protected override void RegisterEvents(IEventManagerInternal eventManager)
         {
@@ -86,8 +89,31 @@ namespace Game.Model
             CreateAndExecuteTurn(
                 (ITurn turn) =>
                 {
-                    CmdMoveGhostB cmdMoveGhostB = new CmdMoveGhostB(_eDirectionGhostB);
-                    _eDirectionGhostB = cmdMoveGhostB.getDirection(_eDirectionGhostB, _context);
+                    CmdMoveGhostB cmdMoveGhostB = new CmdMoveGhostB(_eDirectionGhostB_current);
+                    _eDirectionGhostB_last = _eDirectionGhostB_current;
+                    _eDirectionGhostB_current = cmdMoveGhostB.getDirection(_eDirectionGhostB_current, _context);
+                    if(_eDirectionGhostB_current == _eDirectionGhostB_last)
+                    {
+                        direction_counter++;
+                        //Debug.Log("A  direction_counter = " + direction_counter );
+                    } else
+                    {
+                        direction_counter = 0;
+                        //Debug.Log("X  last = " + _eDirectionGhostB_last + ", current = " + _eDirectionGhostB_current);
+                    }
+                    if (direction_counter == DIRECTION_MAX)
+                    {
+                        while(_eDirectionGhostB_last == _eDirectionGhostB_current)
+                        {
+                            Debug.Log("1  last = " + _eDirectionGhostB_last + ", current = " + _eDirectionGhostB_current);
+                            cmdMoveGhostB.ChangeDirection();
+                            _eDirectionGhostB_current = cmdMoveGhostB.getDirection(_eDirectionGhostB_current, _context);
+                            Debug.Log("2  last = " + _eDirectionGhostB_last + ", current = " + _eDirectionGhostB_current);
+
+                        }
+
+                        direction_counter = 0;
+                    }
                     turn.Push(cmdMoveGhostB);
                 });
         } 
