@@ -25,12 +25,12 @@ namespace Game
             VisualManager.Init(_model.EventManager, ITERATION_TIME);
 
             _model.Init();
-            //_model.InitGhostA();
+            _model.InitGhostA();
             _model.InitGhostB();
             while (true)
             {
                 _model.Update(current_direction);
-                //_model.UpdateGhostA();
+                _model.UpdateGhostA();
                 _model.UpdateGhostB();
                 yield return new WaitForSeconds(ITERATION_TIME);
  

@@ -21,6 +21,7 @@ namespace Game.Model
     {
 
         eDirection _eDirectionGhostA;
+        ePacmanPosition _ePacmanPosition;
         eDirection _eDirectionGhostB_last;
         eDirection _eDirectionGhostB_current;
         int direction_counter = 0;
@@ -67,10 +68,11 @@ namespace Game.Model
         void IModelPacMan.UpdateGhostA()
         {
             _eDirectionGhostA = eDirection.DOWN;
+            _ePacmanPosition = ePacmanPosition.DownDown;
             CreateAndExecuteTurn(
                 (ITurn turn) =>
                 {
-                    CmdMoveGhostA cmdMoveGhostA = new CmdMoveGhostA(_eDirectionGhostA);
+                    CmdMoveGhostA cmdMoveGhostA = new CmdMoveGhostA(_eDirectionGhostA, _ePacmanPosition);
                     turn.Push(cmdMoveGhostA);
                 });
         }

@@ -9,11 +9,13 @@ namespace Game.Model
         class CmdMoveGhostA : ICommand
         {
             eDirection _direction;
+            ePacmanPosition _pacmanPosition;
 
             // ========================================
 
-            public CmdMoveGhostA(eDirection direction) {               
+            public CmdMoveGhostA(eDirection direction, ePacmanPosition pacmanPosition) {               
                 _direction = direction;
+                _pacmanPosition = pacmanPosition;
             }
 
             // ============== ICommand ================
@@ -22,27 +24,34 @@ namespace Game.Model
             {
                 IGhostAWritable ghostA = context.CharactardsContainer.Get<IGhostAWritable>();
                 IPacManWritable pacman = context.CharactardsContainer.Get<IPacManWritable>();
-                 
-                bool isCanMove = context.Field.IsCanMove(ghostA.X, ghostA.Y, _direction);
 
-                if (isCanMove)
+                ePacmanPosition pacmanPosition = Direction.getPacmanPosition(pacman.X, pacman.Y, ghostA.X, ghostA.Y);
+                List<eDirection> directions = Direction.FindPacman(pacmanPosition);
+                foreach (eDirection direction in directions)
                 {
-                    (int x, int y) nextPositon = Direction.GetNextPosition(ghostA.X, ghostA.Y, _direction);
-                    ghostA.UpdatePositionA(nextPositon.x, nextPositon.y);
-                    context.EventManager.Get<IPacManEventsWritable>().UpdateGhostAPosition(nextPositon.x, nextPositon.y);
+                    if(context.Field.IsCanMove(ghostA.X, ghostA.Y, direction))
+                    {
+                        _direction = direction;
+                        break;
+                    }
                 }
 
-                //bool isCanMove = false;
+                (int x, int y) nextPositon = Direction.GetNextPosition(ghostA.X, ghostA.Y, _direction);
+                ghostA.UpdatePositionA(nextPositon.x, nextPositon.y);
+                context.EventManager.Get<IPacManEventsWritable>().UpdateGhostAPosition(nextPositon.x, nextPositon.y);
 
-                //while (!isCanMove)
+                // Default move down
+                //IGhostAWritable ghostA = context.CharactardsContainer.Get<IGhostAWritable>();
+                //IPacManWritable pacman = context.CharactardsContainer.Get<IPacManWritable>();
+
+                //bool isCanMove = context.Field.IsCanMove(ghostA.X, ghostA.Y, _direction);
+
+                //if (isCanMove)
                 //{
-                //    _direction = Direction.GetNextDirection(pacman.X, pacman.Y, ghostA.X, ghostA.Y);
-                //    isCanMove = context.Field.IsCanMove(ghostA.X, ghostA.Y, _direction);
-                //}  
-
-                //(int x, int y) nextPositon = Direction.GetNextPosition(ghostA.X, ghostA.Y, _direction);
-                //ghostA.UpdatePositionA(nextPositon.x, nextPositon.y);
-                //context.EventManager.Get<IPacManEventsWritable>().UpdateGhostAPosition(nextPositon.x, nextPositon.y);
+                //    (int x, int y) nextPositon = Direction.GetNextPosition(ghostA.X, ghostA.Y, _direction);
+                //    ghostA.UpdatePositionA(nextPositon.x, nextPositon.y);
+                //    context.EventManager.Get<IPacManEventsWritable>().UpdateGhostAPosition(nextPositon.x, nextPositon.y);
+                //}
             }
         }
     }

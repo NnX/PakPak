@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Game.Misc
 {
     public enum eDirection
@@ -8,16 +10,16 @@ namespace Game.Misc
         DOWN,
     }
 
-    public enum pacmanPosition
+    public enum ePacmanPosition
     {
-        UpUp,
-        UpRight,
+        UpUp, 
+        UpRight, 
         RightRight,
         RightDown,
-        DownDown,
+        DownDown, 
         DownLeft,
         LeftLeft,
-        LeftUp,
+        LeftUp, 
     }
 
     public static class Direction
@@ -39,37 +41,100 @@ namespace Game.Misc
             }
         }
 
-        public static eDirection GetNextDirection(int pacman_x, int pacman_y, int ghost_x, int ghost_y)
+        public static List<eDirection> FindPacman(ePacmanPosition pacmanPosition)
         {
-            eDirection direction = eDirection.DOWN;
-            if(pacman_x == ghost_x) // move up or down if possible
-            {
+            List<eDirection> parts = new List<eDirection>();
 
-            } else if (pacman_x > ghost_x)    //move right
+            if (pacmanPosition == ePacmanPosition.UpUp) // upup // 1
             {
-             
-
-            } else if (pacman_x < ghost_x) // left
+                parts.Add(eDirection.UP);
+                parts.Add(eDirection.LEFT);
+                parts.Add(eDirection.RIGHT);
+            }
+            else if (pacmanPosition == ePacmanPosition.UpRight)    //up right // 2
             {
-                
+                parts.Add(eDirection.UP);
+                parts.Add(eDirection.RIGHT);
+                parts.Add(eDirection.DOWN);
+            }
+            else if (pacmanPosition == ePacmanPosition.RightRight) // right right // 3
+            {
+                parts.Add(eDirection.RIGHT);
+                parts.Add(eDirection.UP);
+                parts.Add(eDirection.DOWN);
+            }
+            else if (pacmanPosition == ePacmanPosition.RightDown) // right down // 4
+            {
+                parts.Add(eDirection.RIGHT);
+                parts.Add(eDirection.DOWN);
+                parts.Add(eDirection.LEFT);
+            }
+            else if (pacmanPosition == ePacmanPosition.DownDown)    //down down // 5
+            {
+                parts.Add(eDirection.DOWN);
+                parts.Add(eDirection.RIGHT);
+                parts.Add(eDirection.LEFT);
+            }
+            else if (pacmanPosition == ePacmanPosition.DownLeft) // down left // 6
+            {
+                parts.Add(eDirection.DOWN);
+                parts.Add(eDirection.LEFT);
+                parts.Add(eDirection.UP);
+            }
+            else if (pacmanPosition == ePacmanPosition.LeftLeft) // left left // 7
+            {
+                parts.Add(eDirection.LEFT);
+                parts.Add(eDirection.DOWN);
+                parts.Add(eDirection.UP);
+            }
+            else if (pacmanPosition == ePacmanPosition.LeftUp) // left up // 8
+            {
+                parts.Add(eDirection.UP);
+                parts.Add(eDirection.LEFT);
+                parts.Add(eDirection.RIGHT);
             }
 
 
-            if (pacman_y == ghost_y) // move left or right if possible
-            {
+            return parts;
+        }
 
-            } else if (pacman_y > ghost_y)    //move up
-            {
-             
+        public static ePacmanPosition getPacmanPosition(int pacman_x, int pacman_y, int ghost_x, int ghost_y)
+        {
+            ePacmanPosition pacmanPosition = ePacmanPosition.DownLeft;
 
-            } else if (pacman_y < ghost_y) // down
+            if (pacman_x == ghost_x && pacman_y > ghost_y) // upup // 1
             {
-                
+                pacmanPosition = ePacmanPosition.UpUp;
             }
-
-
-
-            return direction;
+            else if (pacman_x > ghost_x && pacman_y > ghost_y)    //up right // 2
+            {
+                pacmanPosition = ePacmanPosition.UpRight;
+            }
+            else if (pacman_x > ghost_x && pacman_y == ghost_y) // right right // 3
+            {
+                pacmanPosition = ePacmanPosition.RightRight;
+            }
+            else if (pacman_x > ghost_x && pacman_y < ghost_y) // right down // 4
+            {
+                pacmanPosition = ePacmanPosition.RightDown;
+            }
+            else if (pacman_x == ghost_x && pacman_y < ghost_y)    //down down // 5
+            {
+                pacmanPosition = ePacmanPosition.DownDown;
+            }
+            else if (pacman_x < ghost_x && pacman_y < ghost_y) // down left // 6
+            {
+                pacmanPosition = ePacmanPosition.DownLeft;
+            }
+            else if (pacman_x < ghost_x && pacman_y == ghost_y) // left left // 7
+            {
+                pacmanPosition = ePacmanPosition.LeftLeft;
+            }
+            else if (pacman_x < ghost_x && pacman_y > ghost_y) // left up // 8
+            {
+                pacmanPosition = ePacmanPosition.LeftUp;
+            }
+            return pacmanPosition;
         }
     }
 }
