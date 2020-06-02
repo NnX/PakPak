@@ -39,22 +39,27 @@ namespace Game
 
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.UpArrow))
+            bool isRight = (Input.GetAxis("DPadX") < -0.1f) ? true : false;
+            bool isLeft = (Input.GetAxis("DPadX") > 0.1f) ? true : false;
+            bool isDown = (Input.GetAxis("DPadY") < -0.1f) ? true : false;
+            bool isUp = (Input.GetAxis("DPadY") > 0.1f) ? true : false;
+
+            if (Input.GetKeyDown(KeyCode.UpArrow) || isUp)
             {
                 current_direction = eDirection.UP;
                 _visualManager.RotatePacMan(90);
             }
-            if (Input.GetKeyDown(KeyCode.DownArrow))
+            if (Input.GetKeyDown(KeyCode.DownArrow) || isDown)
             {
                 current_direction = eDirection.DOWN;
                 _visualManager.RotatePacMan(270);
             }
-            if (Input.GetKeyDown(KeyCode.RightArrow))
+            if (Input.GetKeyDown(KeyCode.RightArrow) || isRight)
             {
                 current_direction = eDirection.RIGHT;
                 _visualManager.RotatePacMan(0);
             }
-            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            if (Input.GetKeyDown(KeyCode.LeftArrow) || isLeft)
             {
                 current_direction = eDirection.LEFT;
                 _visualManager.RotatePacMan(180);
