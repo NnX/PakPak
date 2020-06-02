@@ -97,20 +97,16 @@ namespace Game.Model
                     if(_eDirectionGhostB_current == _eDirectionGhostB_last)
                     {
                         direction_counter++;
-                        //Debug.Log("A  direction_counter = " + direction_counter );
                     } else
                     {
                         direction_counter = 0;
-                        //Debug.Log("X  last = " + _eDirectionGhostB_last + ", current = " + _eDirectionGhostB_current);
                     }
-                    if (direction_counter == DIRECTION_MAX)
+                    if (direction_counter == DIRECTION_MAX) // fix sticking to borders
                     {
                         while(_eDirectionGhostB_last == _eDirectionGhostB_current)
                         {
-                            Debug.Log("1  last = " + _eDirectionGhostB_last + ", current = " + _eDirectionGhostB_current);
                             cmdMoveGhostB.ChangeDirection();
                             _eDirectionGhostB_current = cmdMoveGhostB.getDirection(_eDirectionGhostB_current, _context);
-                            Debug.Log("2  last = " + _eDirectionGhostB_last + ", current = " + _eDirectionGhostB_current);
 
                         }
 
